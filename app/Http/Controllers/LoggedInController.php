@@ -158,10 +158,12 @@ class LoggedInController extends Controller
 		$insertArr['name'] = $_POST['name'];	
 		$insertArr['email'] = $_POST['email'];
 
+	    $password = $_POST['password'];
+		$confirmpass = $_POST['password_confirmation'];
+		  if($password == $confirmpass ){
 		if(trim($_POST['password']) != "") {
 				$insertArr['password'] = Hash::make($_POST['password']);
-		}
-
+		} 
 		DB::table('users')
 		->where('id', Auth::user()->id)
 		->update(
@@ -171,6 +173,14 @@ class LoggedInController extends Controller
 		Session::flash('message', 'Your password settings has been changed'); 
 		Session::flash('alert-class', 'alert-success'); 
 		return back();			
+		  }
+		  else{
+			  
+	    Session::flash('flash_message', 'Password do not match'); 
+		Session::flash('alert-class', 'alert-danger'); 
+		return back();	
+			  
+		  }		
 		
 	}
 
